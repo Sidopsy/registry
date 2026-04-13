@@ -223,6 +223,11 @@
 
         document.getElementById('activity-form').addEventListener('submit', (e) => {
             e.preventDefault();
+
+            if ("vibrate" in navigator) {
+                navigator.vibrate(20);
+            }
+            
             const type = typeSelect.value;
             const metrics = {};
             
