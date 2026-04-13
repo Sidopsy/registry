@@ -130,6 +130,74 @@
             background: rgba(255,255,255,0.02);
         }
 
+        #import-fields-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(79, 214, 190, 0.1);
+            border-radius: 4px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .import-field-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .import-field-item:hover {
+            background: rgba(79, 214, 190, 0.05);
+            border-color: rgba(79, 214, 190, 0.2);
+        }
+
+        .import-field-item input[type="checkbox"] {
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1px solid var(--accent);
+            background: transparent;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .import-field-item input[type="checkbox"]:checked {
+            background: var(--accent);
+        }
+
+        .import-field-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            color: var(--bg);
+            font-size: 10px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .import-field-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .import-field-item input[type="checkbox"]:checked + .import-field-label {
+            color: var(--text);
+        }
+
         .log-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; }
         .log-type { color: var(--accent); font-weight: bold; margin-right: 10px; }
         .pill-box { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
@@ -311,8 +379,9 @@
                 typeSelectMap.innerHTML = optionsHTML;
         
                 fieldsList.innerHTML = pendingHeaders.map((h, i) => `
-                    <label style="font-size: 0.65rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
-                        <input type="checkbox" class="import-col-toggle" value="${i}" data-name="${h}"> ${h}
+                    <label class="import-field-item">
+                        <input type="checkbox" class="import-col-toggle" value="${i}" data-name="${h}"> 
+                        <span class="import-field-label">${h}</span>
                     </label>
                 `).join('');
         
