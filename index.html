@@ -176,17 +176,21 @@
         <button class="btn-subtle" onclick="exportCSV()" style="flex: 1;">Export_Data</button>
     </div>
 
-    <div id="import-setup" class="card" style="display: none; border: 1px solid var(--accent-alt);">
-        <div class="label-tag" style="background: var(--accent-alt);">Import_Protocol_Setup</div>
-        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px;">Select required data mappings:</p>
+    <div id="import-setup" class="card" style="display: none; border: 1px solid var(--accent-alt); max-height: 80vh; overflow-y: auto;">
+        <div class="label-tag" style="background: var(--accent-alt);">IMPORT_CONFIGURATION</div>
+        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 15px;">Map core fields and select attributes to preserve:</p>
         
         <label class="history-label">DATE_FIELD</label>
         <select id="map-date"></select>
         
         <label class="history-label">ACTIVITY_TYPE_FIELD</label>
         <select id="map-type"></select>
+    
+        <label class="history-label" style="margin-top: 15px; display: block;">ATTRIBUTES_TO_INCLUDE</label>
+        <div id="import-fields-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 4px;">
+            </div>
         
-        <button type="button" onclick="executeImport()" style="margin-top: 15px;">Finalize_Import</button>
+        <button type="button" onclick="executeImport()" style="margin-top: 20px; width: 100%;">Finalize_Import</button>
     </div>
 
     <center><button onclick="clearData()" class="wipe">PRIME_DIRECTIVE: ERASE_ALL_DATA</button></center>
@@ -288,9 +292,7 @@
             const reader = new FileReader();
             
             reader.onload = function(event) {
-                const content = event.target.result;
-                // Basic CSV Parsing
-                const allRows = content.split('\n')
+                const allRows = event.target.result.split('\n')
                     .map(r => r.trim())
                     .filter(r => r.length > 0)
                     .map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
@@ -300,21 +302,25 @@
                 pendingHeaders = allRows[0].map(h => h.trim().replace(/^"|"$/g, ''));
                 pendingRows = allRows.slice(1);
         
-                // Populate the mapping dropdowns
                 const dateSelect = document.getElementById('map-date');
                 const typeSelectMap = document.getElementById('map-type');
+                const fieldsList = document.getElementById('import-fields-list');
                 
                 const optionsHTML = pendingHeaders.map((h, i) => `<option value="${i}">${h}</option>`).join('');
                 dateSelect.innerHTML = optionsHTML;
                 typeSelectMap.innerHTML = optionsHTML;
         
-                // Try to auto-guess to save time
+                fieldsList.innerHTML = pendingHeaders.map((h, i) => `
+                    <label style="font-size: 0.65rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                        <input type="checkbox" class="import-col-toggle" value="${i}" data-name="${h}"> ${h}
+                    </label>
+                `).join('');
+        
                 const dGuess = pendingHeaders.findIndex(h => h.toLowerCase().includes('date'));
-                const tGuess = pendingHeaders.findIndex(h => h.toLowerCase().includes('type') || h.toLowerCase().includes('activity'));
+                const tGuess = pendingHeaders.findIndex(h => h.toLowerCase().includes('type'));
                 if(dGuess !== -1) dateSelect.value = dGuess;
                 if(tGuess !== -1) typeSelectMap.value = tGuess;
         
-                // Show the selection UI
                 document.getElementById('import-setup').style.display = 'block';
             };
             reader.readAsText(file);
@@ -324,6 +330,14 @@
             const dIdx = parseInt(document.getElementById('map-date').value);
             const tIdx = parseInt(document.getElementById('map-type').value);
             
+            const selectedIndices = Array.from(document.querySelectorAll('.import-col-toggle:checked'))
+                .map(cb => parseInt(cb.value))
+                .filter(idx => idx !== dIdx && idx !== tIdx);
+        
+            if (selectedIndices.length === 0) {
+                if (!confirm("No additional attributes selected. Proceed with basic entry?")) return;
+            }
+        
             pendingRows.forEach(row => {
                 if (!row[tIdx]) return;
         
@@ -334,16 +348,15 @@
                     dateRaw = isNaN(d.getTime()) ? new Date().toISOString().split('T')[0] : d.toISOString().split('T')[0];
                 } catch(e) { dateRaw = new Date().toISOString().split('T')[0]; }
         
-                // Create metrics from all other fields
                 let m = {};
-                pendingHeaders.forEach((h, idx) => {
-                    if (idx !== dIdx && idx !== tIdx && row[idx]) {
-                        const cleanVal = row[idx].trim().replace(/^"|"$/g, '');
-                        if (cleanVal) m[h.toUpperCase()] = cleanVal;
+                selectedIndices.forEach(idx => {
+                    if (row[idx]) {
+                        const label = pendingHeaders[idx].toUpperCase();
+                        const val = row[idx].trim().replace(/^"|"$/g, '');
+                        if (val) m[label] = val;
                     }
                 });
         
-                // Ensure activity type exists in schema
                 if (!schema[typeRaw]) {
                     schema[typeRaw] = Object.keys(m).map(k => ({
                         id: k.toLowerCase().replace(/[^a-z0-9]/g, '_'),
@@ -355,18 +368,15 @@
                 activities.push({ id: Math.random() + Date.now(), date: dateRaw, type: typeRaw, metrics: m });
             });
         
-            // Save and Cleanup
             localStorage.setItem('schema', JSON.stringify(schema));
             commit();
             populateTypeDropdown();
             
-            // Hide UI
             document.getElementById('import-setup').style.display = 'none';
-            pendingRows = [];
             document.getElementById('import-csv').value = '';
-            alert("IMPORT_COMPLETE");
+            alert("IMPORT_SUCCESSFUL");
         }
-
+        
         function exportCSV() {
             if (!activities.length) return;
             const keys = Array.from(new Set(activities.flatMap(a => Object.keys(a.metrics))));
