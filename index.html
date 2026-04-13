@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0d0f14">
+
+    <link rel="manifest" href='data:application/json,{"name":"REGISTRY","short_name":"REGISTRY","description":"Citizen Oversight Protocol","start_url":".","display":"standalone","background_color":"#0d0f14","theme_color":"#4fd6be","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBkMGYxNCIvPjxwYXRoIGQ9Ik0yMCA1MCBzMTYtMjQgMzAtMjQgMzAgMjQgMzAgMjQtMTYgMjQtMzAgMjQtMzAgLTI0LTMwIC0yNHoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRmZDZiZSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iOCIgZmlsbD0iIzRmZDZiZSIvPjwvc3ZnPg==","sizes":"192x192","type":"image/png"}]}'>
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBkMGYxNCIvPjxwYXRoIGQ9Ik0yMCA1MCBzMTYtMjQgMzAtMjQgMzAgMjQgMzAgMjQtMTYgMjQtMzAgMjQtMzAgLTI0LTMwIC0yNHoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRmZDZiZSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iOCIgZmlsbD0iIzRmZDZiZSIvPjwvc3ZnPg==">
+
+    <title>REGISTRY</title>
+    <style>
+        :root {
+            --bg: #0d0f14;
+            --card: #161a22;
+            --accent: #4fd6be;
+            --accent-alt: #9d7cd8;
+            --text: #a9b1d6;
+            --text-muted: #565f89;
+            --terminal-black: #090b10;
+        }
+
+        body {
+            font-family: 'ui-monospace', 'Cascadia Code', 'Source Code Pro', Menlo, monospace;
+            background-color: var(--bg);
+            color: var(--text);
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            line-height: 1.2;
+        }
+
+        .header {
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            letter-spacing: 6px;
+            margin: 0;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .system-status {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid #23283b;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .label-tag {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--bg);
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        input, select, button {
+            width: 100%;
+            background: var(--terminal-black);
+            border: 1px solid #23283b;
+            color: var(--text);
+            padding: 12px;
+            margin-bottom: 10px;
+            font-family: inherit;
+            box-sizing: border-box;
+            border-radius: 0;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.8; }
+
+        @keyframes flicker {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+
+        .system-status {
+            animation: flicker 0.1s infinite;
+        }
+
+        .history-label {
+            color: var(--accent-alt);
+            font-size: 0.75rem;
+            margin: 20px 0 10px;
+            display: block;
+            border-bottom: 1px solid #23283b;
+            padding-bottom: 5px;
+        }
+
+        .log-entry {
+            border-left: 2px solid var(--text-muted);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .log-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; }
+        .log-type { color: var(--accent); font-weight: bold; margin-right: 10px; }
+        .pill-box { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+        .pill { font-size: 0.75rem; color: var(--accent-alt); }
+
+        .btn-subtle { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); font-size: 0.7rem; }
+        details summary { cursor: pointer; font-size: 0.7rem; color: var(--text-muted); text-align: center; margin: 10px 0; }
+        .wipe { color: #f7768e; border: none; background: none; font-size: 0.65rem; margin-top: 30px; opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Registry</h1>
+        <div class="system-status">CITIZEN_OVERSIGHT // STATUS: ACTIVE</div>
+    </div>
+
+    <div class="card">
+        <div class="label-tag">Input_Required</div>
+        <form id="activity-form">
+            <select id="type" required></select>
+            <div id="dynamic-inputs"></div>
+            <button type="submit">Commit to Record</button>
+        </form>
+    </div>
+
+    <details>
+        <summary>[+] Define New Activity Schema</summary>
+        <div class="card">
+            <input type="text" id="new-type-name" placeholder="SCHEMA_NAME">
+            <input type="text" id="new-type-metrics" placeholder="METRICS_CSV">
+            <button type="button" onclick="addNewType()" class="btn-subtle">Update Protocol</button>
+        </div>
+    </details>
+
+    <span class="history-label">SECURE_ARCHIVE_FEED</span>
+    <div id="activity-list"></div>
+
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <div style="flex: 1; position: relative;">
+            <button class="btn-subtle" style="width: 100%;">Import_Data</button>
+            <input type="file" id="import-csv" accept=".csv" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
+        </div>
+        <button class="btn-subtle" onclick="exportCSV()" style="flex: 1;">Export_Data</button>
+    </div>
+
+    <center><button onclick="clearData()" class="wipe">PRIME_DIRECTIVE: ERASE_ALL_DATA</button></center>
+
+    <script>
+        const defaultSchema = {
+            pushups: [{ id: 'reps', label: 'REPS', type: 'number' }],
+            running: [{ id: 'distance', label: 'KM', type: 'number' }, { id: 'time', label: 'MIN', type: 'number' }]
+        };
+
+        let schema = JSON.parse(localStorage.getItem('schema')) || defaultSchema;
+        let activities = JSON.parse(localStorage.getItem('activities')) || [];
+
+        const typeSelect = document.getElementById('type');
+        const dynamicInputs = document.getElementById('dynamic-inputs');
+        const listContainer = document.getElementById('activity-list');
+
+        function populateTypeDropdown() {
+            typeSelect.innerHTML = Object.keys(schema).sort().map(key => 
+                `<option value="${key}">${key.toUpperCase()}</option>`
+            ).join('');
+            renderInputs();
+        }
+
+        function renderInputs() {
+            const fields = schema[typeSelect.value] || [];
+            dynamicInputs.innerHTML = fields.map(f => 
+                `<input type="${f.type}" id="field-${f.id}" placeholder="${f.label}" autocomplete="off" required>`
+            ).join('');
+        }
+
+        function renderList() {
+            const sorted = [...activities].sort((a, b) => new Date(b.date) - new Date(a.date)).reverse();
+            const displaySet = sorted.slice(0, 50);
+
+            listContainer.innerHTML = displaySet.map(act => `
+                <div class="log-entry">
+                    <div class="log-meta">
+                        <span class="log-type">${(act.type || 'DATA').toUpperCase()}</span> 
+                        <span>${act.date}</span>
+                    </div>
+                    <div class="pill-box">
+                        ${Object.entries(act.metrics).map(([k, v]) => v ? `<span class="pill">${k}:${v}</span>` : '').join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('activity-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const type = typeSelect.value;
+            const metrics = {};
+            
+            schema[type].forEach(f => {
+                const val = document.getElementById(`field-${f.id}`).value;
+                if (val) metrics[f.label] = val;
+            });
+
+            activities.push({
+                id: Date.now(),
+                date: new Date().toISOString().split('T')[0],
+                type: type,
+                metrics: metrics
+            });
+
+            commit();
+            e.target.reset();
+            renderInputs();
+        });
+
+        function addNewType() {
+            const name = document.getElementById('new-type-name').value.trim().toLowerCase();
+            const rawMetrics = document.getElementById('new-type-metrics').value;
+            if(!name || !rawMetrics) return;
+
+            const fields = rawMetrics.split(',').map(m => {
+                const label = m.trim().toUpperCase();
+                return { id: label.toLowerCase().replace(/[^a-z0-9]/g, '_'), label, type: 'text' };
+            });
+
+            schema[name] = fields;
+            localStorage.setItem('schema', JSON.stringify(schema));
+            populateTypeDropdown();
+            document.getElementById('new-type-name').value = '';
+            document.getElementById('new-type-metrics').value = '';
+        }
+
+        document.getElementById('import-csv').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const rows = event.target.result.split('\n')
+                        .map(r => r.trim())
+                        .filter(r => r.length > 0)
+                        .map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+
+                    const headers = rows[0].map(h => h.trim().replace(/^"|"$/g, ''));
+                    let tIdx = headers.findIndex(h => h.toLowerCase().includes('type'));
+                    let dIdx = headers.findIndex(h => h.toLowerCase().includes('date'));
+                    
+                    if (tIdx === -1) tIdx = 1;
+                    if (dIdx === -1) dIdx = 0;
+
+                    rows.slice(1).forEach(row => {
+                        if (!row[tIdx]) return;
+                        const type = row[tIdx].trim().replace(/^"|"$/g, '').toLowerCase();
+                        let date;
+                        try {
+                            date = new Date(row[dIdx]).toISOString().split('T')[0];
+                        } catch(e) { date = new Date().toISOString().split('T')[0]; }
+
+                        if (!schema[type]) {
+                            schema[type] = headers.filter((h, idx) => idx !== tIdx && idx !== dIdx && h)
+                                .map(h => ({ id: h.toLowerCase().replace(/[^a-z0-9]/g, '_'), label: h.toUpperCase(), type: 'text' }));
+                        }
+
+                        let m = {};
+                        headers.forEach((h, idx) => {
+                            if(idx !== tIdx && idx !== dIdx && h && row[idx]) m[h.toUpperCase()] = row[idx].trim().replace(/^"|"$/g, '');
+                        });
+                        activities.push({ id: Math.random(), date, type, metrics: m });
+                    });
+
+                    localStorage.setItem('schema', JSON.stringify(schema));
+                    commit();
+                    populateTypeDropdown();
+                } catch (err) {
+                    alert("PROTOCOL_ERROR: Check CSV Format");
+                }
+                e.target.value = '';
+            };
+            reader.readAsText(file);
+        });
+
+        function exportCSV() {
+            if (!activities.length) return;
+            const keys = Array.from(new Set(activities.flatMap(a => Object.keys(a.metrics))));
+            let csv = "Date,Type," + keys.join(',') + "\n";
+            activities.forEach(a => {
+                csv += `${a.date},${a.type},${keys.map(k => `"${a.metrics[k]||''}"`).join(',')}\n`;
+            });
+            const link = document.createElement("a");
+            link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+            link.download = `registry_backup_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        function commit() {
+            localStorage.setItem('activities', JSON.stringify(activities));
+            renderList();
+        }
+
+        function clearData() {
+            if(confirm("EXECUTE_DESTRUCTION_PROTOCOL?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        typeSelect.addEventListener('change', renderInputs);
+        populateTypeDropdown();
+        renderList();
+    </script>
+</body>
+</html>
