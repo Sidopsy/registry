@@ -7,9 +7,9 @@ A minimalist, serverless activity tracker.
 
 **Local Storage:** No external database or server. All data is stored directly in your browser's local cache.
 
-**Dynamic Schema:** Create custom activity types with specific metrics.
+**Dynamic Schema:** Create and edit custom activity types with specific metrics.
 
-**Data Lifecycle:** Built-in tools for importing CSV data and exporting backups for long-term storage.
+**Data Lifecycle:** Built-in tools for exporting backups and a mapping tool for importing external CSV data.
 
 ## Setup & Installation
 The app is designed as a **Progressive Web App (PWA)**:
@@ -21,17 +21,23 @@ The app is designed as a **Progressive Web App (PWA)**:
 
 Select an activity type and input required metrics to commit a new entry.
 
+**System Analytics** 
+
+Visualize data via a 14-day rolling SVG graph. Filter by activity type or specific metrics to track performance trends.
+
 **Customization** 
 
-Use the "Define New Activity" section to add new categories (e.g., `Yoga` with metrics `Minutes, Intensity`).
+Use the configuration panel to manage the registry's internal structure:
+* **Schema Engine:** Define new protocols, edit existing attributes, or delete types.
+* **System Purge:** Wipe all local records and schemas.
 
 **History** 
 
-View your most recent entries in the scrollable log feed.
+View entries in the scrollable log feed. Filter the feed by activity type to isolate specific records.
 
 **Import/Export** 
 
-Ensure data continuity by exporting your history as a `.csv` file. To sync across devices, export from one and import to the other.
+Ensure data continuity by exporting your history as a `.csv` file. The import tool includes a configuration step to map date/type fields and select specific columns to preserve.
 
 ## Maintenance
 **Backups** 
