@@ -7,11 +7,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0d0f14">
-    
-    <link rel="manifest" href='data:application/json,{"name":"REGISTRY","short_name":"REGISTRY","start_url":".","display":"standalone","background_color":"#0d0f14","theme_color":"#4fd6be","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBkMGYxNCIvPjxwYXRoIGQ9Ik0yMCA1MCBzMTYtMjQgMzAtMjQgMzAgMjQgMzAgMjQtMTYgMjQtMzAgMjQtMzAgLTI0LTMwIC0yNHoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRmZDZiZSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iOCIgZmlsbD0iIzRmZDZiZSIvPjwvc3ZnPg==","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"}]}'>
-    
+
+    <link rel="manifest" href='data:application/json,{"name":"REGISTRY","short name":"REGISTRY","start url":".","display":"standalone","background color":"#0d0f14","theme color":"#4fd6be","icons":[{"src":"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBkMGYxNCIvPjxwYXRoIGQ9Ik0yMCA1MCBzMTYtMjQgMzAtMjQgMzAgMjQgMzAgMjQtMTYgMjQtMzAgMjQtMzAgLTI0LTMwIC0yNHoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRmZDZiZSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iOCIgZmlsbD0iIzRmZDZiZSIvPjwvc3ZnPg==","sizes":"192x192","type":"image/svg+xml","purpose":"any maskable"}]}'>
     <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzBkMGYxNCIvPjxwYXRoIGQ9Ik0yMCA1MCBzMTYtMjQgMzAtMjQgMzAgMjQgMzAgMjQtMTYgMjQtMzAgMjQtMzAgLTI0LTMwIC0yNHoiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzRmZDZiZSIgc3Ryb2tlLXdpZHRoPSI0Ii8+PGNpcmNsZSBjeD0iNTAiIGN5PSI1MCIgcj0iOCIgZmlsbD0iIzRmZDZiZSIvPjwvc3ZnPg==">
-    
+
     <title>REGISTRY</title>
     <style>
         :root {
@@ -30,15 +29,14 @@
             color: var(--text);
             max-width: 500px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 1rem;
             line-height: 1.2;
         }
 
         .header {
             border-left: 4px solid var(--accent);
             padding-left: 15px;
-            margin-bottom: 30px;
-            position: relative;
+            margin: 20px 0 30px;
         }
 
         h1 {
@@ -54,6 +52,7 @@
             color: var(--text-muted);
             letter-spacing: 2px;
             margin-top: 4px;
+            animation: flicker 0.1s infinite;
         }
 
         .card {
@@ -102,7 +101,9 @@
             transition: opacity 0.2s;
         }
 
-        button:hover { opacity: 0.8; }
+        button:hover {
+            opacity: 0.8;
+        }
 
         @keyframes flicker {
             0% { opacity: 0.8; }
@@ -110,83 +111,219 @@
             100% { opacity: 0.9; }
         }
 
-        .system-status {
-            animation: flicker 0.1s infinite;
-        }
-
         .history-label {
             color: var(--accent-alt);
-            font-size: 0.75rem;
-            margin: 20px 0 10px;
+            font-size: 0.7rem;
+            margin: 15px 0 8px;
             display: block;
             border-bottom: 1px solid #23283b;
-            padding-bottom: 5px;
+            padding-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        #activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
         }
 
         .log-entry {
             border-left: 2px solid var(--text-muted);
             padding: 10px 15px;
-            margin-bottom: 10px;
-            background: rgba(255,255,255,0.02);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .log-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .log-type {
+            color: var(--accent);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .pill-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .pill {
+            font-size: 0.75rem;
+            color: var(--accent-alt);
+        }
+
+        /* Config Panel Layout */
+        .config-panel {
+            background: #090b10;
+            border: 1px solid #23283b;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .config-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .block-title {
+            color: var(--accent-alt);
+            /* Purple */
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(157, 124, 216, 0.2);
+            padding-bottom: 4px;
+            margin-bottom: 4px;
+        }
+
+        /* Grid Utilities */
+        .input-split {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 8px;
+        }
+
+        .btn-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        /* Button Semantics */
+        .config-panel button {
+            padding: 10px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: rgba(79, 214, 190, 0.1) !important;
+            border: 1px solid var(--accent) !important;
+            color: var(--accent) !important;
+        }
+
+        .btn-danger {
+            background: rgba(247, 118, 142, 0.1) !important;
+            border: 1px solid #f7768e !important;
+            color: #f7768e !important;
+        }
+
+        .btn-subtle {
+            background: transparent !important;
+            border: 1px solid var(--accent) !important;
+            color: var(--accent) !important;
+            padding: 10px;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-subtle:hover {
+            background: rgba(79, 214, 190, 0.1) !important;
+            box-shadow: 0 0 10px rgba(79, 214, 190, 0.2);
+            border-color: var(--accent) !important;
+        }
+
+        .danger-zone {
+            margin-top: 10px;
+        }
+
+        .full-width {
+            width: 100%;
+        }
+
+        .admin-console {
+            margin-bottom: 5px;
+        }
+
+        .admin-console summary {
+            padding: 10px 0;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            list-style: none;
+            text-align: right;
+            letter-spacing: 1px;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .admin-console summary:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+
+        #import-setup {
+            border: 1px solid var(--accent-alt);
         }
 
         #import-fields-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 8px;
-            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.4);
             padding: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(79, 214, 190, 0.1);
-            border-radius: 4px;
-            max-height: 300px;
+            border: 1px solid rgba(157, 124, 216, 0.2);
+            max-height: 250px;
             overflow-y: auto;
         }
 
         .import-field-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 8px;
+            gap: 10px;
+            padding: 8px;
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 3px;
             cursor: pointer;
-            transition: background 0.2s;
             border: 1px solid transparent;
         }
 
-        .import-field-item:hover {
+        .import-field-item:has(input:checked) {
             background: rgba(79, 214, 190, 0.05);
-            border-color: rgba(79, 214, 190, 0.2);
+            border-color: var(--accent);
         }
 
         .import-field-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin: 0;
             appearance: none;
-            width: 14px;
-            height: 14px;
-            border: 1px solid var(--accent);
+            border: 1px solid var(--text-muted);
             background: transparent;
-            border-radius: 2px;
             position: relative;
-            cursor: pointer;
         }
 
-        .import-field-item input[type="checkbox"]:checked {
+        .import-field-item input:checked {
             background: var(--accent);
+            border-color: var(--accent);
         }
 
-        .import-field-item input[type="checkbox"]:checked::after {
+        .import-field-item input:checked::after {
             content: '✓';
             position: absolute;
             color: var(--bg);
-            font-size: 10px;
-            top: 50%;
+            font-size: 11px;
+            font-weight: bold;
             left: 50%;
+            top: 50%;
             transform: translate(-50%, -50%);
         }
 
         .import-field-label {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
             white-space: nowrap;
@@ -194,29 +331,105 @@
             text-overflow: ellipsis;
         }
 
-        .import-field-item input[type="checkbox"]:checked + .import-field-label {
+        .import-field-item input:checked+.import-field-label {
             color: var(--text);
         }
 
-        .log-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px; }
-        .log-type { color: var(--accent); font-weight: bold; margin-right: 10px; }
-        .pill-box { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
-        .pill { font-size: 0.75rem; color: var(--accent-alt); }
+        .load-more-container {
+            padding: 15px 0;
+            text-align: center;
+        }
 
-        .btn-subtle { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); font-size: 0.7rem; }
-        details summary { cursor: pointer; font-size: 0.7rem; color: var(--text-muted); text-align: center; margin: 10px 0; }
-        .wipe { color: #f7768e; border: none; background: none; font-size: 0.65rem; margin-top: 30px; opacity: 0.5; }
+        .btn-load-more {
+            background: rgba(79, 214, 190, 0.05);
+            border: 1px solid rgba(79, 214, 190, 0.3);
+            color: var(--accent);
+            font-size: 0.7rem;
+            padding: 12px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+        }
+
+
+
+        #edit-schema-selector {
+            background: var(--terminal-black);
+            color: var(--accent-alt);
+            border: 1px solid rgba(157, 124, 216, 0.5);
+            font-size: 0.7rem;
+            padding: 5px;
+            width: 100%;
+        }
     </style>
 </head>
+
 <body>
+
+    <details class="admin-console">
+        <summary>:: SYS CONFIG</summary>
+        <div class="config-panel">
+
+            <div class="config-block">
+                <span class="block-title">SCHEMA ENGINE</span>
+                <select id="edit-schema-selector" onchange="loadSchemaForEditing()">
+                    <option value="">[+] CREATE NEW PROTOCOL</option>
+                </select>
+
+                <div class="input-split">
+                    <input type="text" id="new-type-name" placeholder="TYPE NAME">
+                    <input type="text" id="new-type-metrics" placeholder="ATTRIBUTES (CSV)">
+                </div>
+
+                <div class="btn-split">
+                    <button type="button" class="btn-primary" onclick="addNewType()">COMMIT SCHEMA</button>
+                    <button type="button" class="btn-danger" onclick="deleteSchema()">DROP TYPE</button>
+                </div>
+            </div>
+
+            <div class="config-block">
+                <span class="block-title">DATA TRANSFER</span>
+                <div class="btn-split">
+                    <button type="button" class="btn-subtle" onclick="exportCSV()">EXPORT BACKUP</button>
+                    <button type="button" class="btn-subtle"
+                        onclick="document.getElementById('import-csv').click()">IMPORT CSV</button>
+                    <input type="file" id="import-csv" accept=".csv" style="display:none;">
+                </div>
+            </div>
+
+            <div class="config-block danger-zone">
+                <button type="button" class="btn-danger full-width" onclick="clearData()">INITIATE SYSTEM PURGE</button>
+            </div>
+
+        </div>
+    </details>
 
     <div class="header">
         <h1>Registry</h1>
-        <div class="system-status">CITIZEN_OVERSIGHT // STATUS: ACTIVE</div>
+        <div class="system-status">ACTIVITY LOG</div>
+    </div>
+
+    <div id="import-setup" class="card" style="display: none;">
+        <div class="label-tag" style="background: var(--accent-alt);">IMPORT CONFIGURATION</div>
+        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 15px;">Map core fields and select
+            attributes to preserve:</p>
+
+        <label class="history-label">DATE FIELD</label>
+        <select id="map-date"></select>
+
+        <label class="history-label">ACTIVITY TYPE FIELD</label>
+        <select id="map-type"></select>
+
+        <label class="history-label" style="margin-top: 15px; display: block;">ATTRIBUTES TO INCLUDE</label>
+        <div id="import-fields-list"></div>
+
+        <button type="button" onclick="executeImport()" style="margin-top: 20px;">Finalize Import</button>
+        <button type="button" onclick="document.getElementById('import-setup').style.display='none'" class="btn-subtle"
+            style="border:none; margin-top:5px;">CANCEL IMPORT</button>
     </div>
 
     <div class="card">
-        <div class="label-tag">Input_Required</div>
+        <div class="label-tag">Input Required</div>
         <form id="activity-form">
             <select id="type" required></select>
             <div id="dynamic-inputs"></div>
@@ -224,77 +437,84 @@
         </form>
     </div>
 
-    <details>
-        <summary>[+] Define New Activity Schema</summary>
-        <div class="card">
-            <input type="text" id="new-type-name" placeholder="SCHEMA_NAME">
-            <input type="text" id="new-type-metrics" placeholder="METRICS_CSV">
-            <button type="button" onclick="addNewType()" class="btn-subtle">Update Protocol</button>
+    <div
+        style="display: flex; gap: 10px; justify-content: space-between; align-items: center; margin: 20px 0 10px; flex-wrap: wrap;">
+        <span class="history-label" style="margin: 0; border: none;">REGISTRY FEED</span>
+        <div style="display: flex; gap: 8px;">
+            <select id="filter-metric" onchange="updateGraph();"
+                style="display: none; width: auto; margin: 0; padding: 4px 8px; font-size: 0.7rem; border-color: var(--accent-alt); color: var(--accent-alt);"></select>
+            <select id="filter-type" onchange="itemsToShow=5;populateDropdowns();renderList();updateGraph();"
+                style="width: auto; margin: 0; padding: 4px 8px; font-size: 0.7rem; border-color: var(--accent-alt); color: var(--accent-alt);">
+                <option value="all">ALL ACTIVITIES</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- GRAPH SECTION -->
+    <details id="graph-container" style="margin-bottom: 20px;">
+        <summary class="label-tag"
+            style="cursor:pointer; list-style:none; background: var(--accent-alt); margin-bottom: 0;">[+] SYSTEM
+            ANALYTICS</summary>
+        <div style="margin: 15px 0; background: rgba(0,0,0,0.2); border: 1px solid #23283b; padding: 20px 10px 10px;">
+            <svg id="activityChart" viewBox="0 0 400 100"
+                style="width: 100%; height: 160px; display: block; overflow: visible;"></svg>
         </div>
     </details>
-
-    <span class="history-label">SECURE_ARCHIVE_FEED</span>
     <div id="activity-list"></div>
-
-    <div style="display: flex; gap: 10px; margin-top: 20px;">
-        <div style="flex: 1; position: relative;">
-            <button class="btn-subtle" style="width: 100%;">Import_Data</button>
-            <input type="file" id="import-csv" accept=".csv" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer;">
-        </div>
-        <button class="btn-subtle" onclick="exportCSV()" style="flex: 1;">Export_Data</button>
-    </div>
-
-    <div id="import-setup" class="card" style="display: none; border: 1px solid var(--accent-alt); max-height: 80vh; overflow-y: auto;">
-        <div class="label-tag" style="background: var(--accent-alt);">IMPORT_CONFIGURATION</div>
-        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 15px;">Map core fields and select attributes to preserve:</p>
-        
-        <label class="history-label">DATE_FIELD</label>
-        <select id="map-date"></select>
-        
-        <label class="history-label">ACTIVITY_TYPE_FIELD</label>
-        <select id="map-type"></select>
-    
-        <label class="history-label" style="margin-top: 15px; display: block;">ATTRIBUTES_TO_INCLUDE</label>
-        <div id="import-fields-list" style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 4px;">
-            </div>
-        
-        <button type="button" onclick="executeImport()" style="margin-top: 20px; width: 100%;">Finalize_Import</button>
-    </div>
-
-    <center><button onclick="clearData()" class="wipe">PRIME_DIRECTIVE: ERASE_ALL_DATA</button></center>
+    <div id="load-more-area" class="load-more-container"></div>
 
     <script>
-        const defaultSchema = {
+        // Constants & State
+        const $ = id => document.getElementById(id);
+        const schema = JSON.parse(localStorage.getItem('schema')) || {
             pushups: [{ id: 'reps', label: 'REPS', type: 'number' }],
             running: [{ id: 'distance', label: 'KM', type: 'number' }, { id: 'time', label: 'MIN', type: 'number' }]
         };
-
-        let schema = JSON.parse(localStorage.getItem('schema')) || defaultSchema;
         let activities = JSON.parse(localStorage.getItem('activities')) || [];
+        let itemsToShow = 5;
 
-        const typeSelect = document.getElementById('type');
-        const dynamicInputs = document.getElementById('dynamic-inputs');
-        const listContainer = document.getElementById('activity-list');
+        // Core Logic
+        function populateDropdowns() {
+            const keys = Object.keys(schema).sort();
+            const filter = $('filter-type').value, metric = $('filter-metric').value;
 
-        function populateTypeDropdown() {
-            typeSelect.innerHTML = Object.keys(schema).sort().map(key => 
-                `<option value="${key}">${key.toUpperCase()}</option>`
-            ).join('');
+            $('type').innerHTML = keys.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
+            $('edit-schema-selector').innerHTML = '<option value="">[+] NEW PROTOCOL</option>' +
+                keys.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
+
+            $('filter-type').innerHTML = '<option value="all">ALL ACTIVITIES</option>' +
+                keys.map(k => `<option value="${k}">${k.toUpperCase()}</option>`).join('');
+            $('filter-type').value = filter || 'all';
+
+            // Sync Metric Selector
+            if ($('filter-type').value === 'all') {
+                $('filter-metric').style.display = 'none';
+            } else {
+                const fields = schema[$('filter-type').value] || [];
+                $('filter-metric').innerHTML = fields.map(f => `<option value="${f.label}" ${f.label === metric ? 'selected' : ''}>${f.label}</option>`).join('');
+                $('filter-metric').style.display = 'block';
+            }
+
             renderInputs();
         }
 
         function renderInputs() {
-            const fields = schema[typeSelect.value] || [];
-            dynamicInputs.innerHTML = fields.map(f => 
+            const fields = schema[$('type').value] || [];
+            $('dynamic-inputs').innerHTML = fields.map(f =>
                 `<input type="${f.type}" id="field-${f.id}" placeholder="${f.label}" autocomplete="off" required>`
             ).join('');
         }
 
         function renderList() {
-            const sorted = [...activities].sort((a, b) => new Date(b.date) - new Date(a.date)).reverse();
-            const displaySet = sorted.slice(0, 50);
+            const filter = $('filter-type').value;
+            const filtered = filter === 'all' ? activities : activities.filter(a => a.type === filter);
+            const sorted = [...filtered].sort((a, b) => {
+                const d1 = new Date(a.date), d2 = new Date(b.date);
+                return d2 - d1 || b.id - a.id;
+            });
 
-            listContainer.innerHTML = displaySet.map(act => `
+            const display = sorted.slice(0, itemsToShow);
+            $('activity-list').innerHTML = display.map(act => `
                 <div class="log-entry">
                     <div class="log-meta">
                         <span class="log-type">${(act.type || 'DATA').toUpperCase()}</span> 
@@ -305,175 +525,176 @@
                     </div>
                 </div>
             `).join('');
+
+            const rem = filtered.length - itemsToShow;
+            $('load-more-area').innerHTML = rem > 0 ?
+                `<button class="btn-load-more" onclick="itemsToShow+=10;renderList()">LOAD MORE (${rem})</button>` : '';
         }
 
-        document.getElementById('activity-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            if ("vibrate" in navigator) {
-                navigator.vibrate(20);
+        function updateGraph() {
+            const filter = $('filter-type').value, svg = $('activityChart');
+            const dateMap = {};
+            for (let i = 13; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                dateMap[d.toISOString().split('T')[0]] = 0;
             }
-            
-            const type = typeSelect.value;
+
+            const activeMetric = filter === 'all' ? 'COUNT' : ($('filter-metric').value || (schema[filter] && schema[filter][0].label));
+
+            activities.forEach(a => {
+                if (dateMap[a.date] !== undefined) {
+                    if (filter === 'all') { dateMap[a.date]++; }
+                    else if (a.type === filter) {
+                        const val = parseFloat(a.metrics[activeMetric]);
+                        if (!isNaN(val)) dateMap[a.date] += val;
+                    }
+                }
+            });
+
+            const keys = Object.keys(dateMap), vals = Object.values(dateMap);
+            const max = Math.max(...vals, 1) * 1.3, w = 400, h = 100, pad = 25;
+            const color = filter === 'all' ? 'var(--accent)' : 'var(--accent-alt)';
+
+            const points = vals.map((v, i) => ({
+                x: pad + (i / (vals.length - 1)) * (w - pad * 2),
+                y: h - pad - (v / max) * (h - pad * 2),
+                v, date: keys[i]
+            }));
+
+            let pathData = `M ${points[0].x},${points[0].y}`;
+            const t = 0.2;
+            for (let i = 0; i < points.length - 1; i++) {
+                const p0 = points[i - 1] || points[i], p1 = points[i], p2 = points[i + 1], p3 = points[i + 2] || p2;
+                const cp1x = p1.x + (p2.x - p0.x) / 6 * t, cp1y = p1.y + (p2.y - p0.y) / 6 * t;
+                const cp2x = p2.x - (p3.x - p1.x) / 6 * t, cp2y = p2.y - (p3.y - p1.y) / 6 * t;
+                pathData += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
+            }
+
+            svg.innerHTML = `
+                <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${color}" stop-opacity="0.3"/><stop offset="100%" stop-color="${color}" stop-opacity="0"/></linearGradient></defs>
+                ${[0, 0.5, 1].map(v => `<line x1="${pad}" y1="${h - pad - v * (h - pad * 2)}" x2="${w - pad}" y2="${h - pad - v * (h - pad * 2)}" stroke="rgba(255,255,255,0.05)" stroke-dasharray="2,2"/>`).join('')}
+                <line x1="${pad}" y1="${h - pad}" x2="${w - pad}" y2="${h - pad}" stroke="var(--text-muted)" stroke-width="1"/>
+                <path d="${pathData} L ${w - pad},${h - pad} L ${pad},${h - pad} Z" fill="url(#grad)" />
+                <path d="${pathData}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" />
+                <text id="chart-val" x="${w / 2}" y="${pad / 2 + 5}" font-size="8" fill="var(--text-muted)" text-anchor="middle" letter-spacing="1">${activeMetric}: SELECT POINT</text>
+                ${points.map((p, i) => `
+                    <g onmouseenter="this.querySelector('circle').setAttribute('r', 4); $('chart-val').textContent='${p.date.split('-').slice(1).join('/')}: ${p.v % 1 === 0 ? p.v : p.v.toFixed(1)} ${activeMetric}'; $('chart-val').setAttribute('fill', '${color}')" 
+                       onmouseleave="this.querySelector('circle').setAttribute('r', 2); $('chart-val').textContent='${activeMetric}: SELECT POINT'; $('chart-val').setAttribute('fill', 'var(--text-muted)')" style="cursor: pointer;">
+                        <circle cx="${p.x}" cy="${p.y}" r="2" fill="${color}" stroke="var(--bg)" stroke-width="1" />
+                        <rect x="${p.x - 10}" y="${pad}" width="20" height="${h - pad * 2}" fill="transparent" />
+                    </g>
+                    ${i % 4 === 0 || i === vals.length - 1 ? `<text x="${p.x}" y="${h - pad + 15}" font-size="6" fill="var(--text-muted)" text-anchor="middle">${p.date.split('-').slice(1).join('/')}</text>` : ''}
+                `).join('')}
+            `;
+        }
+
+        // Event Handlers
+        $('activity-form').onsubmit = (e) => {
+            e.preventDefault();
+            if ("vibrate" in navigator) navigator.vibrate(20);
+            const type = $('type').value;
             const metrics = {};
-            
             schema[type].forEach(f => {
-                const val = document.getElementById(`field-${f.id}`).value;
+                const val = $(`field-${f.id}`).value;
                 if (val) metrics[f.label] = val;
             });
-
-            activities.push({
-                id: Date.now(),
-                date: new Date().toISOString().split('T')[0],
-                type: type,
-                metrics: metrics
-            });
-
-            commit();
+            activities.push({ id: Date.now(), date: new Date().toISOString().split('T')[0], type, metrics });
+            save();
             e.target.reset();
             renderInputs();
-        });
+            updateGraph();
+        };
 
         function addNewType() {
-            const name = document.getElementById('new-type-name').value.trim().toLowerCase();
-            const rawMetrics = document.getElementById('new-type-metrics').value;
-            if(!name || !rawMetrics) return;
-
-            const fields = rawMetrics.split(',').map(m => {
-                const label = m.trim().toUpperCase();
-                return { id: label.toLowerCase().replace(/[^a-z0-9]/g, '_'), label, type: 'text' };
-            });
-
-            schema[name] = fields;
-            localStorage.setItem('schema', JSON.stringify(schema));
-            populateTypeDropdown();
-            document.getElementById('new-type-name').value = '';
-            document.getElementById('new-type-metrics').value = '';
+            const name = $('new-type-name').value.trim().toLowerCase();
+            const raw = $('new-type-metrics').value.trim();
+            if (!name || !raw) return;
+            schema[name] = raw.split(',').map(m => ({
+                id: m.trim().toLowerCase().replace(/[^a-z0-0]/g, '_'),
+                label: m.trim().toUpperCase(),
+                type: 'text'
+            }));
+            saveSchema();
+            $('new-type-name').value = ''; $('new-type-metrics').value = '';
+            populateDropdowns();
         }
 
-        let pendingRows = [];
-        let pendingHeaders = [];
-        
-        document.getElementById('import-csv').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            
-            reader.onload = function(event) {
-                const allRows = event.target.result.split('\n')
-                    .map(r => r.trim())
-                    .filter(r => r.length > 0)
-                    .map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
-        
-                if (allRows.length < 2) return;
-        
-                pendingHeaders = allRows[0].map(h => h.trim().replace(/^"|"$/g, ''));
-                pendingRows = allRows.slice(1);
-        
-                const dateSelect = document.getElementById('map-date');
-                const typeSelectMap = document.getElementById('map-type');
-                const fieldsList = document.getElementById('import-fields-list');
-                
-                const optionsHTML = pendingHeaders.map((h, i) => `<option value="${i}">${h}</option>`).join('');
-                dateSelect.innerHTML = optionsHTML;
-                typeSelectMap.innerHTML = optionsHTML;
-        
-                fieldsList.innerHTML = pendingHeaders.map((h, i) => `
-                    <label class="import-field-item">
-                        <input type="checkbox" class="import-col-toggle" value="${i}" data-name="${h}"> 
-                        <span class="import-field-label">${h}</span>
-                    </label>
-                `).join('');
-        
-                const dGuess = pendingHeaders.findIndex(h => h.toLowerCase().includes('date'));
-                const tGuess = pendingHeaders.findIndex(h => h.toLowerCase().includes('type'));
-                if(dGuess !== -1) dateSelect.value = dGuess;
-                if(tGuess !== -1) typeSelectMap.value = tGuess;
-        
-                document.getElementById('import-setup').style.display = 'block';
-            };
-            reader.readAsText(file);
-        });
-        
-        function executeImport() {
-            const dIdx = parseInt(document.getElementById('map-date').value);
-            const tIdx = parseInt(document.getElementById('map-type').value);
-            
-            const selectedIndices = Array.from(document.querySelectorAll('.import-col-toggle:checked'))
-                .map(cb => parseInt(cb.value))
-                .filter(idx => idx !== dIdx && idx !== tIdx);
-        
-            if (selectedIndices.length === 0) {
-                if (!confirm("No additional attributes selected. Proceed with basic entry?")) return;
+        function deleteSchema() {
+            const sel = $('edit-schema-selector').value;
+            if (sel && confirm(`DELETE ${sel.toUpperCase()}?`)) {
+                delete schema[sel];
+                saveSchema();
+                populateDropdowns();
             }
-        
-            pendingRows.forEach(row => {
-                if (!row[tIdx]) return;
-        
-                const typeRaw = row[tIdx].trim().replace(/^"|"$/g, '').toLowerCase();
-                let dateRaw;
-                try {
-                    const d = new Date(row[dIdx].trim().replace(/^"|"$/g, ''));
-                    dateRaw = isNaN(d.getTime()) ? new Date().toISOString().split('T')[0] : d.toISOString().split('T')[0];
-                } catch(e) { dateRaw = new Date().toISOString().split('T')[0]; }
-        
-                let m = {};
-                selectedIndices.forEach(idx => {
-                    if (row[idx]) {
-                        const label = pendingHeaders[idx].toUpperCase();
-                        const val = row[idx].trim().replace(/^"|"$/g, '');
-                        if (val) m[label] = val;
-                    }
-                });
-        
-                if (!schema[typeRaw]) {
-                    schema[typeRaw] = Object.keys(m).map(k => ({
-                        id: k.toLowerCase().replace(/[^a-z0-9]/g, '_'),
-                        label: k,
-                        type: 'text'
-                    }));
-                }
-        
-                activities.push({ id: Math.random() + Date.now(), date: dateRaw, type: typeRaw, metrics: m });
-            });
-        
-            localStorage.setItem('schema', JSON.stringify(schema));
-            commit();
-            populateTypeDropdown();
-            
-            document.getElementById('import-setup').style.display = 'none';
-            document.getElementById('import-csv').value = '';
-            alert("IMPORT_SUCCESSFUL");
         }
-        
+
+        function loadSchemaForEditing() {
+            const sel = $('edit-schema-selector').value;
+            $('new-type-name').value = sel || '';
+            $('new-type-metrics').value = sel ? schema[sel].map(f => f.label).join(', ') : '';
+        }
+
+        // Persistence
+        const save = () => { localStorage.setItem('activities', JSON.stringify(activities)); renderList(); };
+        const saveSchema = () => localStorage.setItem('schema', JSON.stringify(schema));
+
+        // CSV Utilities
         function exportCSV() {
             if (!activities.length) return;
-            const keys = Array.from(new Set(activities.flatMap(a => Object.keys(a.metrics))));
-            let csv = "Date,Type," + keys.join(',') + "\n";
-            activities.forEach(a => {
-                csv += `${a.date},${a.type},${keys.map(k => `"${a.metrics[k]||''}"`).join(',')}\n`;
-            });
+            const keys = [...new Set(activities.flatMap(a => Object.keys(a.metrics)))].sort();
+            const csv = "Date,Type," + keys.join(',') + "\n" +
+                activities.map(a => `${a.date},${a.type},${keys.map(k => `"${a.metrics[k] || ''}"`).join(',')}`).join('\n');
             const link = document.createElement("a");
             link.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-            link.download = `registry_backup_${new Date().toISOString().split('T')[0]}.csv`;
+            link.download = `backup_${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
         }
 
-        function commit() {
-            localStorage.setItem('activities', JSON.stringify(activities));
-            renderList();
+        // Import Logic
+        let pending = { rows: [], headers: [] };
+        $('import-csv').onchange = (e) => {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const rows = ev.target.result.split('\n').map(r => r.trim()).filter(r => r).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+                pending.headers = rows[0].map(h => h.trim().replace(/^"|"$/g, ''));
+                pending.rows = rows.slice(1);
+                const opts = pending.headers.map((h, i) => `<option value="${i}">${h}</option>`).join('');
+                $('map-date').innerHTML = opts; $('map-type').innerHTML = opts;
+                $('import-fields-list').innerHTML = pending.headers.map((h, i) => `
+                    <label class="import-field-item"><input type="checkbox" class="import-col" value="${i}"> <span>${h}</span></label>`).join('');
+                $('import-setup').style.display = 'block';
+            };
+            reader.readAsText(e.target.files[0]);
+        };
+
+        function executeImport() {
+            const dIdx = +$('map-date').value, tIdx = +$('map-type').value;
+            const selIdx = [...document.querySelectorAll('.import-col:checked')].map(cb => +cb.value);
+            pending.rows.forEach(row => {
+                const type = (row[tIdx] || '').trim().toLowerCase() || 'data';
+                let date;
+                try {
+                    date = new Date(row[dIdx].trim().replace(/^"|"$/g, '')).toISOString().split('T')[0];
+                } catch (e) { date = new Date().toISOString().split('T')[0]; }
+                const metrics = {};
+                selIdx.forEach(i => { if (row[i]) metrics[pending.headers[i].toUpperCase()] = row[i].trim().replace(/^"|"$/g, ''); });
+                if (!schema[type]) schema[type] = Object.keys(metrics).map(k => ({ id: k.toLowerCase(), label: k, type: 'text' }));
+                activities.push({ id: Date.now() + Math.random(), date, type, metrics });
+            });
+            saveSchema(); save();
+            $('import-setup').style.display = 'none';
+            populateDropdowns();
+            updateGraph();
         }
 
-        function clearData() {
-            if(confirm("EXECUTE_DESTRUCTION_PROTOCOL?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
+        function clearData() { if (confirm("PURGE SYSTEM?")) { localStorage.clear(); location.reload(); } }
 
-        typeSelect.addEventListener('change', renderInputs);
-        populateTypeDropdown();
+        // Init
+        populateDropdowns();
         renderList();
+        updateGraph();
+        $('type').onchange = renderInputs;
     </script>
 </body>
+
 </html>
