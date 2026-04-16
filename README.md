@@ -13,8 +13,8 @@ A minimalist, serverless activity tracker.
 
 ## Setup & Installation
 The app is designed as a **Progressive Web App (PWA)**:
-1. **Mobile Install:** Access the URL on your mobile browser.
-1. **Add to Home Screen:** Use your browser's "Add to Home Screen" feature to install the app as a standalone utility.
+1. **Mobile Install:** Go to [REGISTRY](https://sidopsy.github.io/registry/) on your mobile browser.
+1. **Add to Home Screen:** Use your browser's "Install" or "Add to Home Screen" feature to install the app.
 
 ## Functionality
 **Logging** 
